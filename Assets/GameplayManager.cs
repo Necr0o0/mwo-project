@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameplayManager : MonoBehaviour
 {
     public GridGenerator GridGenerator;
-    public GridGenerator PlayerModel;
+    public PlayerController PlayerModel;
 
     private Vector2Int grid;
     private Vector2Int PlayerPos;
@@ -15,7 +15,8 @@ public class GameplayManager : MonoBehaviour
     {
         Debug.Log("So it begins!");
         grid =  GridGenerator.Generate();
-        
+        Instantiate(PlayerModel, Vector3.up, Quaternion.identity);
+        PlayerModel.SetCamera();
     }
     
 }

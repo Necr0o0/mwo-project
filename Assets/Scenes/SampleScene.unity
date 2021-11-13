@@ -234,6 +234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GridGenerator: {fileID: 1477817890}
+  PlayerModel: {fileID: 8874450764638394010, guid: a146650710246ce4aa74863653cb8b94, type: 3}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
