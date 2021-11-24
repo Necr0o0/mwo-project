@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace UI
 {
@@ -27,7 +28,10 @@ namespace UI
 
         private void MovePlayer(Vector2 dir)
         {
-            //TODO: Player controls
+            var gm = GameplayManager.instance;
+            var gridNodes = GameplayManager.instance.grid.Nodes;
+            
+            gm.PlayerModel.MoveTo(gridNodes[Random.Range(0,gridNodes.Count)]);
         }
     }
 }

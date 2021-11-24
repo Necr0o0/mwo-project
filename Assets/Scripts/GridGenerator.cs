@@ -18,22 +18,40 @@ public class GridGenerator : MonoBehaviour
        gridBlocks = new List<GameObject>();
    }
 
-   public Vector2Int Generate()
+   public Graph Generate()
     {
+        Graph g = new Graph();
         cursorPos = Vector3.zero;
         for (int i = 0; i < gridSize.x; i++)
         {
             for (int j = 0; j < gridSize.y; j++)
             {
-                var x = Instantiate(basicGrid,cursorPos,Quaternion.identity);
+                var x = Instantiate(basicGrid,cursorPos,Quaternion.identity,transform);
+                
+                g.AddNode(cursorPos);
+                
                 cursorPos.x += spaceBetween;
                 gridBlocks.Add(x);
+                
             }
 
             cursorPos.x = 0.0f;
             cursorPos.z += spaceBetween;
         }
-        return gridSize;
+        
+        foreach (var from in g.Nodes)
+        {
+            foreach (var to in g.Nodes)
+            {
+                if (Vector3.Distance(from.worldPos, to.worldPos) <  spaceBetween * 1.5f && from != to)
+                {
+                    var edge = new Graph.Edge(from,to,1);
+                    g.Edges.Add(edge);
+                }
+            }
+        }
+        
+        return g;
     }
    
 }

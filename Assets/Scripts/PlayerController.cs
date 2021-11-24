@@ -2,37 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour,IEntity
 {
-    // Start is called before the first frame update
+    private Graph.Node currentPos;
+    
     public void SetCamera()
     {
         var offset = new Vector3(0,1,-4);
         Camera.main.transform.position = transform.position + offset;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.W))
-        {
-            transform.position += Vector3.forward * 1.5f; //between
-        }
-        if(Input.GetKeyDown(KeyCode.S))
-        {
-            transform.position -= Vector3.forward * 1.5f; //between
-        }
-        
-        if(Input.GetKeyDown(KeyCode.A))
-        {
-            transform.position -= Vector3.right * 1.5f; //between
-        }
-        
-        if(Input.GetKeyDown(KeyCode.D))
-        {
-            transform.position += Vector3.right * 1.5f; //between
-        }
 
+    public Graph.Node GetNodePosition()
+    {
+        return currentPos;
+    }
+
+    public void MoveTo(Graph.Node node)
+    {
+        gameObject.transform.position= node.worldPos;
+        Debug.Log(transform.position+" jestem na node:" +node.worldPos);
+        currentPos = node;
         SetCamera();
+
+    }
+
+    public void Attack()
+    {
+        throw new System.NotImplementedException();
     }
 }

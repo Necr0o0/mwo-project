@@ -956,6 +956,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 3683388999025937570, guid: c28b0f6e44e3c66428e98de842e9c021, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3683388999025937630, guid: c28b0f6e44e3c66428e98de842e9c021, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1118,7 +1122,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2128986519
 RectTransform:
   m_ObjectHideFlags: 0
