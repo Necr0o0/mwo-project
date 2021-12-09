@@ -630,7 +630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7c616c9160d3d4418cf87839b286a4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameUI:
+  gameUI:
   - {fileID: 2128986518}
   - {fileID: 319195400}
   gameplayManager: {fileID: 528782161}
@@ -1062,7 +1062,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2128986519
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1125,7 +1125,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2499873477301233524, guid: d2092b55ac292254d9972201d0c77989, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2499873477301233525, guid: d2092b55ac292254d9972201d0c77989, type: 3}
       propertyPath: m_Pivot.x

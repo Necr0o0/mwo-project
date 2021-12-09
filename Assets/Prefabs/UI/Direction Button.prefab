@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 5322519606429428537}
   - component: {fileID: 8093495822877240717}
   - component: {fileID: 8921661311279229201}
+  - component: {fileID: 4305628996220083366}
   - component: {fileID: 8031890603959849301}
   m_Layer: 5
   m_Name: Direction Button
@@ -152,6 +153,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4305628996220083366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8046106914260320294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87f963ca989cd76409e1564ad5522425, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 8031890603959849301}
+  requiredPoints: 1
 --- !u!114 &8031890603959849301
 MonoBehaviour:
   m_ObjectHideFlags: 0
