@@ -32,6 +32,8 @@ public class EnemyLogic : MonoBehaviour
     
     public void Move()
     {
+        grid.Nodes[gridPos].SetOccupied(false);
+
         var path =  grid.GetPath(grid.Nodes[gridPos], GameplayManager.instance.PlayerModel.GetNodePosition());
 
         if (path.Count > 1)
@@ -40,10 +42,14 @@ public class EnemyLogic : MonoBehaviour
             pos.y += 1.5f;
             transform.position = pos;
             
-          //  grid.Nodes[gridPos].SetOccupied(false);
             gridPos = path[1].index;
-           // grid.Nodes[gridPos].SetOccupied(true);
+            grid.Nodes[gridPos].SetOccupied(true);
 
+        }
+
+        if (gridPos == GameplayManager.instance.PlayerModel.GetNodePosition().index)
+        {
+            GameplayManager.instance.GameOver();
         }
 
     }

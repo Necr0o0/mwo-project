@@ -4,7 +4,11 @@ using UnityEngine;
 public class GameplayManager : MonoBehaviour
 {
     public GridGenerator GridGenerator;
+    public PlayerController PlayerModelPrefab;
+    
+    [HideInInspector]
     public PlayerController PlayerModel;
+
 
     public EnemyLogic enemy;
 
@@ -14,6 +18,7 @@ public class GameplayManager : MonoBehaviour
     public Graph grid;
 
     public static GameplayManager instance;
+    public GameManager gameManager;
 
     private void Awake()
     {
@@ -22,14 +27,15 @@ public class GameplayManager : MonoBehaviour
     }
 
 
-    public void StartGameplay()
+    public void StartGameplay(GameManager gm)
     {
+        gameManager = gm;
         Debug.Log("So it begins!");
         grid =  GridGenerator.Generate();
         
         enemyList = new List<EnemyLogic>();
 
-        Instantiate(PlayerModel, Vector3.up, Quaternion.identity);
+        PlayerModel =Instantiate(PlayerModelPrefab, Vector3.up, Quaternion.identity);
         PlayerModel.MoveTo(grid.Nodes[3]);
         
         SpawnEnemy(3);
@@ -37,8 +43,7 @@ public class GameplayManager : MonoBehaviour
     
     public void GameOver()
     {
-        Debug.Log("So it ends!");
-
+        gameManager.StartSummary();
     }
 
     public void SpawnEnemy(int spawncount)

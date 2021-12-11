@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,8 +22,23 @@ public class GameManager : MonoBehaviour
     {
         gameUI[0].SetActive(false);
         gameUI[1].SetActive(true);
-        gameplayManager.StartGameplay();
+        gameplayManager.StartGameplay(this);
         StartPlayerTurn();
+    }
+    
+    
+    public void StartSummary()
+    {
+        gameUI[1].SetActive(false);
+        gameUI[2].SetActive(true);
+
+    }
+    public void StartMenu()
+    {
+        SceneManager.LoadScene(0);
+        /*gameUI[2].SetActive(false);
+        gameUI[0].SetActive(true);*/
+
     }
 
     public void EndTurn()
@@ -36,6 +52,6 @@ public class GameManager : MonoBehaviour
 
     private void StartPlayerTurn()
     {
-        UIActionsManager.SetPoints(2);
+        UIActionsManager.SetPoints(4);
     }
 }

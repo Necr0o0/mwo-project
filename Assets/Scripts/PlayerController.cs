@@ -9,16 +9,12 @@ public class PlayerController : MonoBehaviour,IEntity
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-           transform.position += Vector3.up;
-           SetCamera();
-        }
+  
     }
 
     public void SetCamera()
     {
-        var offset = new Vector3(0,1,-4);
+        var offset = new Vector3(0,4,-4);
         Camera.main.transform.position = transform.position + offset;
         Debug.Log("Gracz jest na: " +transform.position);
 
@@ -34,9 +30,7 @@ public class PlayerController : MonoBehaviour,IEntity
     {
         currentPos = node;
 
-        Vector3 pos = node.worldPos;
-        transform.position = pos;
-        Debug.Log(transform.position+" :" +node.worldPos);
+        transform.position = node.worldPos + Vector3.up ;
         SetCamera();
 
     }
