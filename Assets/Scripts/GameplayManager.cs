@@ -63,10 +63,16 @@ public class GameplayManager : MonoBehaviour
 
     public void Move()
     {
+        if (enemyList.Count <= 0)
+        {
+            GameOver();
+            return;
+        }
         foreach (var enemy in enemyList)
         {
             enemy.Move();
         }
+        
     }
 
 }
