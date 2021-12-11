@@ -7,7 +7,7 @@ using UnityEngine;
 public class GridGenerator : MonoBehaviour
 {
    [SerializeField] private GameObject basicGrid;
-   [SerializeField] private Vector2Int gridSize;
+   [SerializeField] public Vector2Int gridSize;
 
    private List<GameObject> gridBlocks;
    private Vector3 cursorPos;

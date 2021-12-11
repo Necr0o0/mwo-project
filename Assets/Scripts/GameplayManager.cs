@@ -34,6 +34,12 @@ public class GameplayManager : MonoBehaviour
         
         SpawnEnemy(3);
     }
+    
+    public void GameOver()
+    {
+        Debug.Log("So it ends!");
+
+    }
 
     public void SpawnEnemy(int spawncount)
     {
