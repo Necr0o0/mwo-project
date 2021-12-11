@@ -34,8 +34,17 @@ namespace UI
         {
             var gm = GameplayManager.instance;
             var gridNodes = GameplayManager.instance.grid.Nodes;
-            
-            gm.PlayerModel.MoveTo(gridNodes[Random.Range(0,gridNodes.Count)]);
+
+            int destinationNode = gm.PlayerModel.currentPos.index + (int)dir.x +
+                                 ( (int)dir.y * GameplayManager.instance.GridGenerator.gridSize.y);
+
+            if (destinationNode >= 0 && destinationNode < GameplayManager.instance.grid.Nodes.Count)
+            {
+                Debug.Log("IDE NA GRID ID: "+destinationNode);
+                gm.PlayerModel.MoveTo(GameplayManager.instance.grid.Nodes[destinationNode]);
+
+
+            }
             
             UIActionsManager.MakeAction(pointCost);
         }
