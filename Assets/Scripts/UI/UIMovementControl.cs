@@ -35,7 +35,7 @@ namespace UI
             var gm = GameplayManager.instance;
             var gridNodes = GameplayManager.instance.grid.Nodes;
 
-            int destinationNode = gm.PlayerModel.currentPos.index + (int)dir.x +
+            int destinationNode = gm.PlayerModel.GetNodePosition().index + (int)dir.x +
                                  ( (int)dir.y * GameplayManager.instance.GridGenerator.gridSize.y);
 
             if (destinationNode >= 0 && destinationNode < GameplayManager.instance.grid.Nodes.Count)
