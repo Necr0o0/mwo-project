@@ -20,7 +20,10 @@ public class GridGenerator : MonoBehaviour
 
    public Graph Generate()
     {
-        Graph g = new Graph();
+        Graph g = new Graph
+        {
+            size = gridSize
+        };
         cursorPos = Vector3.zero;
         for (int i = 0; i < gridSize.x; i++)
         {
@@ -32,7 +35,6 @@ public class GridGenerator : MonoBehaviour
                 
                 cursorPos.x += spaceBetween;
                 gridBlocks.Add(x);
-                
             }
 
             cursorPos.x = 0.0f;

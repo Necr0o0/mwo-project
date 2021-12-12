@@ -4,11 +4,11 @@ using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Graph 
+public class Graph
 {
-    public List<Node> Nodes;
-    public List<Edge> Edges;
-    
+    public Vector2Int size;
+    public readonly List<Node> Nodes;
+    public readonly List<Edge> Edges;
     
     public Graph()
     {
@@ -16,9 +16,29 @@ public class Graph
         Edges = new List<Edge>();
     }
 
-    public int GetRandomNodeID()
+    public Node GetRandomFreeNode()
     {
-        return Random.Range(0, Nodes.Count);
+        Node ret;
+        do
+        {
+            var randomId = Random.Range(0, Nodes.Count);
+            ret = Nodes[randomId];
+        } while (ret.IsOccupied);
+
+        return ret;
+    }
+
+    public Node GetNode(Node startPos, Vector2Int direction)
+    {
+        return GetNode(startPos.index + direction.x + (direction.y * size.x));
+    }
+
+    public Node GetNode(int id)
+    {
+        if (id < 0 || id >= Nodes.Count)
+            return null;
+        
+        return Nodes[id];
     }
 
     public void AddNode(Vector3 worldPos)
@@ -26,6 +46,7 @@ public class Graph
         var node = new Node(Nodes.Count,worldPos);
         Nodes.Add(node);
     }
+    
     public void AddEdge(Node from, Node to, int cost)
     {
         var edge = new Edge(from,to,cost);
@@ -35,20 +56,27 @@ public class Graph
     public class Node
     {
         public int index;
-        public bool isOccupied;
+        public IEntity occupyingEntity = null;
         
         public Vector3 worldPos;
+        
+        public bool IsOccupied => !(occupyingEntity is null);
+
         
         public Node(int index, Vector3 worldPos)
         {
             this.index = index;
             this.worldPos = worldPos;
-            isOccupied = false;
         }
 
-        public void SetOccupied(bool val)
+        public void Occupy(IEntity entity)
         {
-            isOccupied = val;
+            occupyingEntity = entity;
+        }
+
+        public void Free()
+        {
+            occupyingEntity = null;
         }
     }
     
@@ -59,7 +87,7 @@ public class Graph
         {
             if (edge.from == of)
             {
-                if (edge.to.isOccupied)
+                if (edge.to.IsOccupied)
                     continue;
                 neighbours.Add(edge.to);
             }
@@ -93,7 +121,7 @@ public class Graph
 
         for (int i = 0; i < Nodes.Count; i++)
         {
-            if (Nodes[i].isOccupied)
+            if (Nodes[i].IsOccupied)
                 continue;
             openList.Add(Nodes[i]);
             distances.Add(Nodes[i],float.PositiveInfinity);
@@ -153,15 +181,12 @@ public class Graph
         }
         public int GetCost()
         {
-            if (to.isOccupied)
+            if (to.IsOccupied)
             {
                 return Int32.MaxValue;
             }
 
             return cost;
         }
-
     }
-    
-   
 }

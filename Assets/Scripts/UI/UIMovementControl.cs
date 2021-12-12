@@ -1,52 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using Random = UnityEngine.Random;
 
 namespace UI
 {
     public class UIMovementControl : MonoBehaviour
     {
+        public static UIMovementControl instance;
         [Min(0)]
         [SerializeField] private int pointCost = 1;
         
         [Serializable]
         public struct DirectionButtonData
         {
-            public Vector2 direction;
+            public Vector2Int direction;
             public UsableWithPoints usableButton;
         }
         
         [SerializeField] private List<DirectionButtonData> directions;
 
 
-        private void Awake()
+        private void Start()
         {
+            instance = this;
             foreach (DirectionButtonData buttonData in directions)
             {
                 buttonData.usableButton.button.onClick.AddListener(() => MovePlayer(buttonData.direction));
                 buttonData.usableButton.requiredPoints = pointCost;
             }
+            
+            RefreshInputVisual();
         }
 
-        private void MovePlayer(Vector2 dir)
+        private void MovePlayer(Vector2Int dir)
         {
-            var gm = GameplayManager.instance;
-            var gridNodes = GameplayManager.instance.grid.Nodes;
-
-            int destinationNode = gm.PlayerModel.GetNodePosition().index + (int)dir.x +
-                                 ( (int)dir.y * GameplayManager.instance.GridGenerator.gridSize.y);
-
-            if (destinationNode >= 0 && destinationNode < GameplayManager.instance.grid.Nodes.Count)
-            {
-                Debug.Log("IDE NA GRID ID: "+destinationNode);
-                gm.PlayerModel.MoveTo(GameplayManager.instance.grid.Nodes[destinationNode]);
-
-
-            }
+            GameplayManager.instance.PlayerModel.Move(dir);
             
             UIActionsManager.MakeAction(pointCost);
+            
+            RefreshInputVisual();
+        }
+        
+        public void RefreshInputVisual(bool _ = true)
+        {
+            foreach (DirectionButtonData directionButtonData in directions)
+            {
+                var pos = GameplayManager.instance.PlayerModel.GetNodePosition();
+                var neighbourNode = GameplayManager.instance.grid.GetNode(pos, directionButtonData.direction);
+
+                bool canMove = !(neighbourNode is null);
+                directionButtonData.usableButton.SetSelfInteractive(canMove);
+
+                if (canMove && neighbourNode.IsOccupied)
+                {
+                    directionButtonData.usableButton.button.image.color = Color.red;
+                }
+                else
+                {
+                    directionButtonData.usableButton.button.image.color = Color.white;
+                }
+            }
         }
     }
 }

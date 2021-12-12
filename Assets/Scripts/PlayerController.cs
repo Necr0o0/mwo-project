@@ -1,42 +1,39 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour,IEntity
+public class PlayerController : MonoBehaviour, IEntity
 {
+    [SerializeField] private Vector3 cameraOffset = new Vector3(0, 4, -4);
     private Graph.Node currentPos;
-
-    private void Update()
-    {
-  
-    }
-
-    public void SetCamera()
-    {
-        var offset = new Vector3(0,4,-4);
-        Camera.main.transform.position = transform.position + offset;
-        Debug.Log("Gracz jest na: " +transform.position);
-
-    }
-
-
+    
     public Graph.Node GetNodePosition()
     {
         return currentPos;
     }
 
+    public void Move(Vector2Int direction)
+    {
+        var node = GameplayManager.instance.grid.GetNode(currentPos, direction);
+        MoveTo(node);
+    }
+
     public void MoveTo(Graph.Node node)
     {
         currentPos = node;
+        if (currentPos.IsOccupied)
+            currentPos.occupyingEntity.OnAttacked();
 
-        transform.position = node.worldPos + Vector3.up ;
+        transform.position = currentPos.worldPos + Vector3.up;
         SetCamera();
-
     }
 
-    public void Attack()
+    private void SetCamera()
     {
-        throw new System.NotImplementedException();
+        Camera.main.transform.position = transform.position + cameraOffset;
+        Debug.Log("Gracz jest na: " + transform.position);
+    }
+
+    public void OnAttacked()
+    {
+        GameplayManager.instance.GameOver();
     }
 }

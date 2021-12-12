@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,6 +8,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<GameObject> gameUI;
 
     [SerializeField] private GameplayManager gameplayManager;
+    [SerializeField] private SummaryWindow summaryWindow;
+
+    [Space]
+    [Min(1)]
+    [SerializeField] private int pointsPerRound = 2;
+    
 
     private void Awake()
     {
@@ -27,24 +33,28 @@ public class GameManager : MonoBehaviour
     }
     
     
-    public void StartSummary()
+    public void StartSummary(bool won)
     {
+        summaryWindow.ShowEndScreen(won);
         gameUI[1].SetActive(false);
         gameUI[2].SetActive(true);
-
     }
     public void StartMenu()
     {
         SceneManager.LoadScene(0);
         /*gameUI[2].SetActive(false);
         gameUI[0].SetActive(true);*/
-
     }
 
     public void EndTurn()
     {
         UIActionsManager.SetActiveGameplayActions(false);
-        
+
+        if (gameplayManager.CheckWinCondition())
+        {
+            StartSummary(true);
+            return;
+        }
         gameplayManager.Move();
         
         StartPlayerTurn();
@@ -52,6 +62,12 @@ public class GameManager : MonoBehaviour
 
     private void StartPlayerTurn()
     {
-        UIActionsManager.SetPoints(4);
+        UIActionsManager.SetPoints(pointsPerRound);
+        UIMovementControl.instance?.RefreshInputVisual();
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 }

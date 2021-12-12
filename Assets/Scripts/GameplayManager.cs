@@ -8,21 +8,18 @@ public class GameplayManager : MonoBehaviour
     
     [HideInInspector]
     public PlayerController PlayerModel;
-
-
-    public EnemyLogic enemy;
-
-
-    private List<EnemyLogic> enemyList;
+    public EnemyLogic enemyPrefab;
     
     public Graph grid;
-
-    public static GameplayManager instance;
     public GameManager gameManager;
+    
+    public static GameplayManager instance;
+    
+    public readonly List<EnemyLogic> enemyList = new List<EnemyLogic>();
 
     private void Awake()
     {
-        if(instance== null)
+        if (instance == null)
             instance = this;
     }
 
@@ -31,48 +28,53 @@ public class GameplayManager : MonoBehaviour
     {
         gameManager = gm;
         Debug.Log("So it begins!");
-        grid =  GridGenerator.Generate();
+        grid = GridGenerator.Generate();
         
-        enemyList = new List<EnemyLogic>();
+        enemyList.Clear();
 
-        PlayerModel =Instantiate(PlayerModelPrefab, Vector3.up, Quaternion.identity);
-        PlayerModel.MoveTo(grid.Nodes[3]);
+        PlayerModel = Instantiate(PlayerModelPrefab, Vector3.up, Quaternion.identity);
+        PlayerModel.MoveTo(grid.GetNode(3));
         
-        SpawnEnemy(3);
+        SpawnEnemy(5);
     }
     
     public void GameOver()
     {
-        gameManager.StartSummary();
+        gameManager.StartSummary(false);
     }
 
-    public void SpawnEnemy(int spawncount)
+    private void SpawnEnemy(int spawnCount)
     {
-        for (int i = 0; i < spawncount; i++)
+        for (int i = 0; i < spawnCount; i++)
         {
-            var spawnPos =   grid.GetRandomNodeID();
-            var pos = grid.Nodes[spawnPos].worldPos;
+            Graph.Node node = grid.GetRandomFreeNode();
+
+            var pos = node.worldPos;
             pos.y += 1.5f;
-            var enemyInstance = Instantiate(enemy,pos , Quaternion.identity);
+            var enemyInstance = Instantiate(enemyPrefab,pos , Quaternion.identity);
             
-            enemyInstance.Spawn(spawnPos);
+            enemyInstance.Spawn(node);
             
             enemyList.Add(enemyInstance);
         }
     }
-
-    public void Move()
+    
+    public bool CheckWinCondition()
     {
         if (enemyList.Count <= 0)
         {
-            GameOver();
-            return;
+            return true;
         }
+
+        return false;
+    }
+
+    public void Move()
+    {
         foreach (var enemy in enemyList)
         {
             enemy.Move();
         }
-        
     }
 
 }

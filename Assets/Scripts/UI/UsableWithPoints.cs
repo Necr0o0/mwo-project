@@ -8,10 +8,13 @@ public class UsableWithPoints : MonoBehaviour
     [Min(0)]
     public int requiredPoints = 1;
 
+    private bool interactive = true;
+    private bool active = true;
+
     private void Awake()
     {
         UIActionsManager.OnActionPointsChange += OnActionPointsChange;
-        UIActionsManager.OnSetActiveGameplayActions += SetActiveGameplayActions;
+        UIActionsManager.OnSetActiveGameplayActions += SetActiveGameInteraction;
         if (!button)
             button = GetComponent<Button>();
     }
@@ -19,16 +22,24 @@ public class UsableWithPoints : MonoBehaviour
     private void OnDestroy()
     {
         UIActionsManager.OnActionPointsChange -= OnActionPointsChange;
-        UIActionsManager.OnSetActiveGameplayActions -= SetActiveGameplayActions;
+        UIActionsManager.OnSetActiveGameplayActions -= SetActiveGameInteraction;
     }
 
     private void OnActionPointsChange(int newPoints)
     {
-        button.interactable = newPoints >= requiredPoints;
+        active = newPoints >= requiredPoints;
+        button.interactable = active;
     }
 
-    private void SetActiveGameplayActions(bool active)
+    private void SetActiveGameInteraction(bool active)
     {
-        button.interactable = active;
+        this.active = active;
+        button.interactable = active && interactive;
+    }
+
+    public void SetSelfInteractive(bool interactive)
+    {
+        this.interactive = interactive;
+        button.interactable = active && interactive;
     }
 }

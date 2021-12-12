@@ -13,10 +13,13 @@ public static class UIActionsManager
         ChangeActionPoints(points);
     }
 
-    public static void MakeAction(int pointCost)
+    public static bool MakeAction(int pointCost)
     {
+        if (pointCost > points)
+            return false;
         points -= pointCost;
         ChangeActionPoints(points);
+        return true;
     }
 
     private static void ChangeActionPoints(int newPoints)

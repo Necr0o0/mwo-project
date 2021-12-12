@@ -1,40 +1,23 @@
-﻿
-using System;
-using Enemy;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class EnemyLogic : MonoBehaviour
+public class EnemyLogic : MonoBehaviour, IEntity
 {
-    private EnemyData EnemyData;
-
-    public int gridPos;
     private Graph grid;
 
     private Graph.Node currentNode;
 
-    
-
-    public void Spawn(int startID)
+    public void Spawn(Graph.Node startNode)
     {
-        gridPos = startID;
-      // currentNode = grid.Nodes[gridPos];
-      grid = GameplayManager.instance.grid;
-      
-      //grid.Nodes[gridPos].SetOccupied(true);
-
-      EnemyData = new EnemyData();
+        grid = GameplayManager.instance.grid;
+        currentNode = startNode;
+        currentNode.Occupy(this);
     }
 
-    private void Attack()
-    {
-        
-    }
-    
     public void Move()
     {
-        grid.Nodes[gridPos].SetOccupied(false);
+        currentNode.Free();
 
-        var path =  grid.GetPath(grid.Nodes[gridPos], GameplayManager.instance.PlayerModel.GetNodePosition());
+        var path =  grid.GetPath(currentNode, GameplayManager.instance.PlayerModel.GetNodePosition());
 
         if (path.Count > 1)
         {
@@ -42,15 +25,31 @@ public class EnemyLogic : MonoBehaviour
             pos.y += 1.5f;
             transform.position = pos;
             
-            gridPos = path[1].index;
-            grid.Nodes[gridPos].SetOccupied(true);
-
+            currentNode = path[1];
+            if (currentNode == GameplayManager.instance.PlayerModel.GetNodePosition())
+                GameplayManager.instance.PlayerModel.OnAttacked();
+            currentNode.Occupy(this);
         }
+    }
 
-        if (gridPos == GameplayManager.instance.PlayerModel.GetNodePosition().index)
+    public void OnAttacked()
+    {
+        GameplayManager.instance.enemyList.Remove(this);
+        currentNode.Free();
+        Destroy(gameObject);
+    }
+
+    private void OnMouseDown()
+    {
+        currentNode.Free();
+        var path =  grid.GetPath(currentNode, GameplayManager.instance.PlayerModel.GetNodePosition());
+        currentNode.Occupy(this);
+
+        if (path.Count > 0 && path.Count <= 3)
         {
-            GameplayManager.instance.GameOver();
+            bool successfulAttack = UIActionsManager.MakeAction(KillTutorial.KillPointsCost);
+            if (successfulAttack)
+                OnAttacked();
         }
-
     }
 }
