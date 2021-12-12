@@ -35,7 +35,7 @@ public class GameplayManager : MonoBehaviour
         PlayerModel = Instantiate(PlayerModelPrefab, Vector3.up, Quaternion.identity);
         PlayerModel.MoveTo(grid.GetNode(3));
         
-        SpawnEnemy(5);
+        SpawnEnemy(8);
     }
     
     public void GameOver()
